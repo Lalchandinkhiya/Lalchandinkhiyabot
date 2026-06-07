@@ -1,0 +1,68 @@
+# ╔══════════════════════════════════════════════════════════════╗
+# ║     LALCHAND INKHIYA BOT - Docker Compose                    ║
+# ╚══════════════════════════════════════════════════════════════╝
+version: "3.9"
+
+services:
+  bot:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: lalchand_inkhiya_bot
+    restart: unless-stopped
+    env_file:
+      - ../.env
+    volumes:
+      - ../logs:/app/logs
+      - ../backups:/app/backups
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - bot_network
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017
+
+  mongodb:
+    image: mongo:7.0
+    container_name: lalchand_mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - bot_network
+    environment:
+      MONGO_INITDB_DATABASE: lalchand_inkhiya_db
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: lalchand_mongo_express
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin123
+    depends_on:
+      - mongodb
+    networks:
+      - bot_network
+
+volumes:
+  mongodb_data:
+  mongodb_config:
+
+networks:
+  bot_network:
+    driver: bridge

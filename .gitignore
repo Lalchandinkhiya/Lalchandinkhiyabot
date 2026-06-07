@@ -1,0 +1,47 @@
+# ── Sensitive Files ───────────────────────────────────────────────────────
+.env
+*.env
+.env.*
+!.env.example
+
+# ── Python ────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ── Virtual Environments ──────────────────────────────────────────────────
+venv/
+env/
+ENV/
+.venv/
+
+# ── Logs & Data ───────────────────────────────────────────────────────────
+logs/*.log
+backups/*.json
+backups/*.zip
+*.log
+
+# ── IDE ───────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# ── Docker ───────────────────────────────────────────────────────────────
+docker/data/
+
+# ── Secrets ───────────────────────────────────────────────────────────────
+*.pem
+*.key
+secrets/

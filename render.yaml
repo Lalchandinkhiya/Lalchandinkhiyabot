@@ -1,0 +1,19 @@
+# Render Deployment Configuration
+# https://render.com
+
+services:
+  - type: worker
+    name: lalchand-inkhiya-bot
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: SUPER_ADMIN_ID
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: SECRET_KEY
+        sync: false
+    autoDeploy: true
